@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
-import { GoogleLogin } from 'react-google-login';
 import {
   Container,
   Paper,
@@ -31,17 +30,12 @@ export default function LoginPage() {
     }
   };
 
-  const handleGoogleSuccess = async (response: any) => {
+  const handleGoogleLogin = async () => {
     try {
-      await googleLogin(response);
-      router.push('/profile/setup');
+      await googleLogin();
     } catch (error: any) {
       setError(error.message || 'Google login failed');
     }
-  };
-
-  const handleGoogleFailure = (error: any) => {
-    setError('Google login failed. Please try again.');
   };
 
   return (
@@ -91,32 +85,14 @@ export default function LoginPage() {
 
             <Divider sx={{ my: 2 }}>OR</Divider>
 
-            <GoogleLogin
-              clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!}
-              buttonText="Login with Google"
-              onSuccess={handleGoogleSuccess}
-              onFailure={handleGoogleFailure}
-              cookiePolicy={'single_host_origin'}
-              render={({ onClick, disabled }) => (
-                <Button
-                  fullWidth
-                  variant="outlined"
-                  color="primary"
-                  onClick={onClick}
-                  disabled={disabled}
-                  sx={{ mb: 2 }}
-                >
-                  Login with Google
-                </Button>
-              )}
-            />
-
             <Button
               fullWidth
-              variant="text"
-              onClick={() => router.push('/register')}
+              variant="outlined"
+              color="primary"
+              onClick={handleGoogleLogin}
+              sx={{ mb: 2 }}
             >
-              Don't have an account? Register
+              Login with Google
             </Button>
           </form>
         </Paper>

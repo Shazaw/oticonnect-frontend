@@ -25,7 +25,7 @@ interface AuthContextType {
   user: User | null;
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
-  googleLogin: (googleData: any) => Promise<void>;
+  googleLogin: () => Promise<void>;
   logout: () => void;
   updateProfile: (profileData: any) => Promise<any>;
   hasRole: (roles: string[]) => boolean;
@@ -67,14 +67,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  const googleLogin = async (googleData: any) => {
+  const googleLogin = async () => {
     try {
-      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/google`, {
-        token: googleData.tokenId,
-      });
-      const { token, user } = response.data;
-      localStorage.setItem('token', token);
-      setUser(user);
+      // Redirect to backend's Google OAuth endpoint
+      window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/api/auth/google`;
     } catch (error: any) {
       throw new Error(error.response?.data?.message || 'Google login failed');
     }
